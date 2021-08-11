@@ -1,4 +1,4 @@
-import prettytable
+from prettytable import PrettyTable
 from math import log2, ceil
 
 def validate_oct(oct):
