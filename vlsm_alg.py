@@ -1,6 +1,16 @@
 from prettytable import PrettyTable
 from math import log2, ceil
 
+def binary_to_decimal(binary):
+    binary=int(binary)
+    decNum = 0
+    power = 0
+    while binary>0:
+        decNum += 2 **power* (binary%10)
+        binary //=10
+        power += 1
+    return decNum
+
 def validate_oct(oct):
     oct=int(oct)
     return (oct<=255) and (oct>=0)
@@ -31,7 +41,6 @@ def input_data():
     subnet_number=int(input("Number of subnets: "))
     subnets=list()
     tot=0
-    subnets.append(subnet_number)
     for i in range(subnet_number):
         name=input("Enter name of subnet "+str(i+1)+": ")
         num=int(input("Number of hosts of subnet '"+name+"': "))
@@ -43,11 +52,40 @@ def input_data():
     return ip, mask, available, subnets
 
 def vlsm(ip, mask, available, subnets):
-    if (available<subnets):
+    if (available<subnets[-1]):
         return False
+    del subnets[-1]
+    octeto_mascara=mask//8 #Mask's last octet position
+    octeto_bit=mask%8 #Mask's last bit position
+    if (octeto_mascara==3):
+        octet=ip[0][-(len(ip[0])-octeto_mascara)] #Last octet doesn't belong to mask completely
+        new_binary=None
+        if (octet<(2**(8-octeto_bit)) and octet>0):
+            octeto_bit-=1
+            new_binary=ip[1][octeto_mascara] #Last octet doesn't belong completely to mask [BINARY]
+            if (octeto_bit>-1):
+                new_binary=new_binary[0:octeto_bit]
+                new_binary=(new_binary)+("0"*(8-len(new_binary)))
+            else:
+                new_binary="0"*8
+
+        elif (octet>(2**(8-octeto_bit))):
+            octeto_bit-=1
+            new_binary=ip[1][octeto_mascara] #Last octet doesn't belong completely to mask [BINARY]
+            if (octeto_bit>-1):
+                new_binary=new_binary[0:octeto_bit+1]
+                new_binary+=("0"*(8-len(new_binary)))
+                
+        if (new_binary is not None):
+            ip[1][len(ip)-octeto_mascara]=new_binary
+            ip[0][len(ip)-octeto_mascara]=binary_to_decimal(new_binary)
+            print ("New major address:", ip)
+
+    subnets=sorted(subnets)
+    return ip, subnets
     
     
 
 if (__name__=="__main__"):
     ip, mask, available, subnets=input_data()
-    print (ip)
+    print (vlsm(ip, mask, available, subnets))
