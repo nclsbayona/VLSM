@@ -26,7 +26,7 @@ def input_data():
         mask=int(input("Not correct, try again. Net-Mask (Bits): "))
 
     #Number of available hosts
-    available=2**(8-(mask%8))-2
+    available=2**(32-mask)-2
 
     subnet_number=int(input("Number of subnets: "))
     subnets=list()
@@ -36,7 +36,7 @@ def input_data():
         name=input("Enter name of subnet "+str(i+1)+": ")
         num=int(input("Number of hosts of subnet '"+name+"': "))
         bits=ceil(log2(num+2))
-        tot+=(2**(bits))
+        tot+=((num)+((2**bits)-(num)-(2)))
         subnets.append((name, num, bits))
     subnets.append(tot)
 
@@ -49,4 +49,5 @@ def vlsm(ip, mask, available, subnets):
     
 
 if (__name__=="__main__"):
-    print (input_data())
+    ip, mask, available, subnets=input_data()
+    print (ip)
