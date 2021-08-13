@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/nclsbayona/Desktop/VLSM-CIDR-master/ENG/.venv"
+set -gx VIRTUAL_ENV "/home/nclsbayona/Desktop/VLSM/.venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
