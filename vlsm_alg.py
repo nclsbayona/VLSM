@@ -107,7 +107,7 @@ def VLSM():
             if i == 0:
                 new_ip = ip
             else:
-                if new_net_mask == net_ips[-1][-1]:
+                if new_net_mask == net_ips[-1][-2]:
                     ip = next_net(ip, new_net_mask)
                 new_ip = ip
             print(
@@ -127,7 +127,7 @@ def VLSM():
                 (
                     str(i + 1) + ". " + subnet[0],
                     subnet[1],
-                    ".".join(list(map(str, new_ip)[0])),
+                    ".".join(list(map(str, new_ip[0]))),
                     new_net_mask,
                     subnet[2],
                 )
