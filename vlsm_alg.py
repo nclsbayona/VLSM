@@ -98,8 +98,9 @@ def VLSM():
                     ip=next_net(ip, new_net_mask)
             except:
                 pass
-            net_ips.append((subnet, deepcopy(new_ip), new_net_mask))
+            net_ips.append((subnet[0], subnet[1], ".".join(list(map(str, new_ip[0]))), new_net_mask, subnet[2]))
 
+        make_files(net_ips)
         return net_ips
 
     except Exception as e:
@@ -107,7 +108,26 @@ def VLSM():
         print_exc()
         print ("An error ocurred, please try again...")
 
-
+def make_files(net_ips):
+    table=PrettyTable(["Name", "Desired number of hosts", "IP", "Netmask", "Total number of hosts available on subnet"])
+    table.add_rows(net_ips)
+    with open("index.html", "w") as f:
+        f.write("<html>")
+        f.write("<head>")
+        f.write("<title>")
+        f.write("VLSM results")
+        f.write("</title>")
+        f.write("</head>")
+        f.write("<body>")
+        f.writelines(table.get_html_string(format=True))
+        f.write("</body>")
+        f.write("</html>")
+    with open("table.json", "w") as f:
+        f.writelines(table.get_json_string(format=True, indent=4))
+    with open("table.csv", "w") as f:
+        f.writelines(table.get_csv_string(format=True))
+    with open("table.txt", "w") as f:
+        f.writelines(table.get_string(format=True))
 if __name__=="__main__":
     #Driver code -- testing
-    VLSM()
+    print(VLSM())

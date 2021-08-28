@@ -1,0 +1,3 @@
+Name,Desired number of hosts,IP,Netmask,Total number of hosts available on subnet
+subnet_1,100,192.168.10.128,25,126
+subnet_2,25,192.168.10.128,27,30
