@@ -1,6 +1,5 @@
 from prettytable import PrettyTable
 from math import log2, ceil
-from copy import deepcopy
 from traceback import print_exc
 
 
@@ -126,9 +125,9 @@ def VLSM():
             )
             net_ips.append(
                 (
-                    str(i+1)+". "+subnet[0],
+                    str(i + 1) + ". " + subnet[0],
                     subnet[1],
-                    ".".join(list(map(str, deepcopy(new_ip)[0]))),
+                    ".".join(list(map(str, new_ip)[0])),
                     new_net_mask,
                     subnet[2],
                 )
