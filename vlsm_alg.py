@@ -1,7 +1,7 @@
 from prettytable import PrettyTable
 from math import log2, ceil
 from copy import deepcopy
-
+from traceback import print_exc
 def validate_oct(oct):
     return (oct<=255) and (oct>=0)
 
@@ -10,7 +10,7 @@ def suma_binaria(bin1, bin2):
 
 def to_binaryOctet(num):
 	return bin(num)[2:].zfill(8)
-    
+
 def to_Decimal(bin):
 	return int(bin, 2)
 
@@ -64,21 +64,47 @@ def validate_possible(ip, mask, available, subnets):
 def subnet_mask(bits_host):
     return 32-bits_host
 
+def next_net(ip, new_mask):
+    print (ip, ip[-1], ip[-1][new_mask//8])
+    adding="1"+"0"*(8-new_mask%8)
+    new=ip[-1][new_mask//8]
+    new=suma_binaria(new, adding)
+    ip[-1][new_mask//8]=new
+    ip[0][new_mask//8]=to_Decimal(new)
+    return ip
+
 def VLSM():
     try:
         ip, mask, available, subnets=input_data()
         while (not validate_possible(ip, mask, available, subnets)):
             print ("The desired VLSM is not possible, please try again...\n\n\n")
             ip, mask, available, subnets=input_data()
-        del subnets[-1] # Delete total of used directions
+        del subnets[-1] # Delete total used directions
         subnets.sort(key=lambda y: y[-2], reverse=True)
-        print (subnets)
-        #Missing
-        print ("Mascara de red:", mask)
-        for subnet in (subnets):
-            print (subnet,'\n', subnet[0],':\n', "\tBits para host:", subnet[-1], "\n\tMascara de subred:", subnet_mask(subnet[-1]), '\n')
+        print ("Ordered subnets:",subnets)
+        print ("Net mask:", mask)
+        net_ips=list()
+        for i, subnet in enumerate (subnets):
+            new_net_mask=subnet_mask(subnet[-1])
+            if (i==0):
+                new_ip=ip
+            else:
+                if (new_net_mask==net_ips[-1][-1]):
+                    ip=next_net(ip, new_net_mask)
+                new_ip=ip
+            print (subnet,'\n', subnet[0],':\n', "\tBits for host:", subnet[-1], "\n\tIP:", ip, "\n\tSubnet mask:", new_net_mask, '\n')
+            try:
+                if (subnet_mask(subnets[i+1][-1])!=new_net_mask):
+                    ip=next_net(ip, new_net_mask)
+            except:
+                pass
+            net_ips.append((subnet, deepcopy(new_ip), new_net_mask))
 
-    except:
+        return net_ips
+
+    except Exception as e:
+        print ("An error ocurred, please try again...")
+        print_exc()
         print ("An error ocurred, please try again...")
 
 
