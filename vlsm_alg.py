@@ -1,6 +1,5 @@
 from prettytable import PrettyTable
 from math import log2, ceil
-from copy import deepcopy
 from traceback import print_exc
 
 
