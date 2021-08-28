@@ -1,5 +1,6 @@
 from prettytable import PrettyTable
 from math import log2, ceil
+from copy import deepcopy
 from traceback import print_exc
 
 
@@ -123,20 +124,20 @@ def VLSM():
                 new_net_mask,
                 "\n",
             )
+            net_ips.append(
+                (
+                    str(i+1)+". "+subnet[0],
+                    subnet[1],
+                    ".".join(list(map(str, deepcopy(new_ip)[0]))),
+                    new_net_mask,
+                    subnet[2],
+                )
+            )
             try:
                 if subnet_mask(subnets[i + 1][-1]) != new_net_mask:
                     ip = next_net(ip, new_net_mask)
             except:
                 pass
-            net_ips.append(
-                (
-                    subnet[0],
-                    subnet[1],
-                    ".".join(list(map(str, new_ip[0]))),
-                    new_net_mask,
-                    subnet[2],
-                )
-            )
 
         make_files(net_ips)
         return net_ips
