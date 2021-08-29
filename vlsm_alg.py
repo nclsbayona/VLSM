@@ -1,6 +1,5 @@
 from prettytable import PrettyTable
 from math import log2, ceil
-from traceback import print_exc
 
 
 def validate_oct(oct):
@@ -141,9 +140,7 @@ def VLSM():
         make_files(net_ips)
         return net_ips
 
-    except Exception as e:
-        print("An error ocurred, please try again...")
-        print_exc()
+    except:
         print("An error ocurred, please try again...")
 
 
