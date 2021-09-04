@@ -85,6 +85,10 @@ def next_net(ip, new_mask):
     adding = "1" + "0" * (8 - new_mask % 8)
     new = ip[-1][new_mask // 8]
     new = suma_binaria(new, adding)
+    if (to_Decimal(new)>255):
+        new=new[-8:]
+        ip[-1][(new_mask//8)-1]=suma_binaria(ip[-1][(new_mask//8)-1],"1")
+        ip[0][(new_mask//8)-1]=to_Decimal(ip[-1][(new_mask//8)-1])
     ip[-1][new_mask // 8] = new
     ip[0][new_mask // 8] = to_Decimal(new)
     return ip
@@ -97,7 +101,7 @@ def VLSM():
             print("The desired VLSM is not possible, please try again...\n\n\n")
             ip, mask, available, subnets = input_data()
         del subnets[-1]  # Delete total used directions
-        subnets.sort(key=lambda y: y[-2], reverse=True)
+        subnets.sort(key=lambda y: y[-3], reverse=True)
         print("Ordered subnets:", subnets)
         print("Net mask:", mask)
         net_ips = list()
